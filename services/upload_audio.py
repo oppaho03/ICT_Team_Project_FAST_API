@@ -2,9 +2,9 @@ import os
 import shutil
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
-from services.stt.transcribe import transcribe_audio
-from services.sentiment_analysis.analyze_sentiment import sentiment_analysis
-from services.sentiment_analysis.keyword_analysis import keyword_sentiment_analysis, load_keywords
+from services.transcribe import transcribe_audio
+from services.analyze_sentiment import sentiment_analysis
+from services.keyword_analysis import keyword_sentiment_analysis, load_keywords
 import pandas as pd
 
 router = APIRouter()
