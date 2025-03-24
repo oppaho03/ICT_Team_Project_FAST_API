@@ -1,0 +1,79 @@
+version: "3.1"
+
+intents:
+  - ask_signup
+  - ask_signup_info
+  - ask_reset_password
+  - ask_account_delete
+  - ask_multiple_accounts
+  - ask_contact_support
+  - ask_hacked_account
+  - ask_auto_delete
+  - ask_delete_personal_info
+  - ask_change_email
+  - ask_logout_shared
+  - ask_login_error
+  - ask_disabled_account
+  - ask_live_chat
+  - ask_support_hours
+  - ask_email_response_time
+  - nlu_fallback
+
+responses:
+  utter_ask_signup:
+    - text: "웹사이트 회원가입 페이지에서 이메일과 비밀번호를 입력하고, 추가 정보를 입력해 가입을 완료할 수 있습니다. 이메일 인증이 필요할 수 있어요."
+
+  utter_ask_signup_info:
+    - text: "기본적으로 이메일, 비밀번호가 필요하며, 서비스에 따라 이름, 전화번호, 생년월일 등의 추가 정보가 필요할 수 있어요."
+
+  utter_ask_reset_password:
+    - text: "로그인 페이지의 '비밀번호 찾기'를 클릭하고 가입한 이메일을 입력하시면 재설정 링크가 포함된 메일을 받게 됩니다."
+
+  utter_ask_account_delete:
+    - text: "계정 설정 페이지에서 '회원 탈퇴'를 선택하시면 됩니다. 일부 서비스는 고객센터를 통해 요청해야 할 수도 있어요."
+
+  utter_ask_multiple_accounts:
+    - text: "일반적으로 한 사람이 여러 계정을 생성하는 것은 제한되지만, 서비스 정책에 따라 다를 수 있어요."
+
+  utter_ask_contact_support:
+    - text: "고객센터 페이지에서 문의 양식을 작성하거나, 이메일 또는 전화로 연락하실 수 있습니다."
+
+  utter_ask_hacked_account:
+    - text: "비밀번호를 즉시 변경하고, 연결된 이메일/결제 정보를 확인하세요. 2단계 인증 설정 및 고객센터 신고를 권장합니다."
+
+  utter_ask_auto_delete:
+    - text: "일정 기간 동안 활동이 없는 계정은 정책에 따라 자동 삭제될 수 있습니다. 자세한 내용은 약관을 참고해주세요."
+
+  utter_ask_delete_personal_info:
+    - text: "계정 설정에서 삭제 요청하거나, 고객센터에 문의하시면 됩니다. 일부 정보는 법적으로 일정 기간 보관될 수 있습니다."
+
+  utter_ask_change_email:
+    - text: "계정 설정 페이지에서 이메일을 변경할 수 있으며, 보안을 위해 인증 절차가 필요할 수 있습니다."
+
+  utter_ask_logout_shared:
+    - text: "다른 기기에서 계정 설정의 '모든 기기에서 로그아웃'을 사용하거나 비밀번호를 변경하시면 됩니다."
+
+  utter_ask_login_error:
+    - text: "비밀번호 재설정 또는 입력한 이메일/비밀번호 확인 후에도 문제가 있으면 고객센터에 문의해 주세요."
+
+  utter_ask_disabled_account:
+    - text: "로그인 시 안내 메시지를 확인하고, 필요 시 고객센터를 통해 계정 상태 확인 및 복구 요청이 가능합니다."
+
+  utter_ask_live_chat:
+    - text: "일부 시간대에 실시간 채팅 지원이 제공됩니다. 고객센터 페이지에서 확인해 주세요."
+
+  utter_ask_support_hours:
+    - text: "일반적으로 평일 오전 9시부터 오후 6시까지 운영되며, 주말 및 공휴일은 제외됩니다."
+
+  utter_ask_email_response_time:
+    - text: "이메일 문의에 대한 답변은 보통 24~48시간 이내에 받아보실 수 있습니다."
+
+  utter_default:
+    - text: "죄송해요, 잘 이해하지 못했어요. 다른 질문을 해보시겠어요? :)"
+
+actions:
+  - action_default_fallback
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

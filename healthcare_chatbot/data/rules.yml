@@ -1,0 +1,88 @@
+version: "3.1"
+
+rules:
+  - rule: 답변 - 회원가입 방법
+    steps:
+      - intent: ask_signup
+      - action: utter_ask_signup
+
+  - rule: 답변 - 회원가입 정보
+    steps:
+      - intent: ask_signup_info
+      - action: utter_ask_signup_info
+
+  - rule: 답변 - 비밀번호 재설정
+    steps:
+      - intent: ask_reset_password
+      - action: utter_ask_reset_password
+
+  - rule: 답변 - 계정 삭제
+    steps:
+      - intent: ask_account_delete
+      - action: utter_ask_account_delete
+
+  - rule: 답변 - 복수 계정 생성
+    steps:
+      - intent: ask_multiple_accounts
+      - action: utter_ask_multiple_accounts
+
+  - rule: 답변 - 고객센터 문의
+    steps:
+      - intent: ask_contact_support
+      - action: utter_ask_contact_support
+
+  - rule: 답변 - 해킹 의심
+    steps:
+      - intent: ask_hacked_account
+      - action: utter_ask_hacked_account
+
+  - rule: 답변 - 자동 삭제
+    steps:
+      - intent: ask_auto_delete
+      - action: utter_ask_auto_delete
+
+  - rule: 답변 - 개인정보 삭제
+    steps:
+      - intent: ask_delete_personal_info
+      - action: utter_ask_delete_personal_info
+
+  - rule: 답변 - 이메일 변경
+    steps:
+      - intent: ask_change_email
+      - action: utter_ask_change_email
+
+  - rule: 답변 - 공용PC 로그아웃
+    steps:
+      - intent: ask_logout_shared
+      - action: utter_ask_logout_shared
+
+  - rule: 답변 - 로그인 오류
+    steps:
+      - intent: ask_login_error
+      - action: utter_ask_login_error
+
+  - rule: 답변 - 계정 비활성화
+    steps:
+      - intent: ask_disabled_account
+      - action: utter_ask_disabled_account
+
+  - rule: 답변 - 실시간 채팅
+    steps:
+      - intent: ask_live_chat
+      - action: utter_ask_live_chat
+
+  - rule: 답변 - 고객지원 운영시간
+    steps:
+      - intent: ask_support_hours
+      - action: utter_ask_support_hours
+
+  - rule: 답변 - 이메일 응답 시간
+    steps:
+      - intent: ask_email_response_time
+      - action: utter_ask_email_response_time
+
+
+  - rule: Fallback when confidence is low
+    steps:
+      - intent: nlu_fallback
+      - action: utter_default
