@@ -12,7 +12,7 @@ text_processor = TextProcessingService()
 class TextRequest(BaseModel):
     text: str
 
-@app.post("/process_text")
+@app.post("/keyword_parser")
 def process_text(request: TextRequest):
     """
     입력된 텍스트를 변환 및 분석하여 반환하는 API
@@ -20,10 +20,15 @@ def process_text(request: TextRequest):
     result = text_processor.process_text(request.text)
     return result
 
+@app.get("/test")
+def test_api():
+    return {"massage":"정상 작동중입니다 !! !! !!"}
+
+
 # FastAPI 실행 (uvicorn 사용)
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="192.168.0.65", port=8001)
 
 # 서버 실행 방법
-# uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+# uvicorn main:app --host 192.168.0.65 --port 8001 --reload
