@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from services.text_processing_service import TextProcessingService
-from api import rasa_endpoint
 
 # FastAPI 앱 생성
 app = FastAPI()
@@ -20,15 +19,6 @@ def process_text(request: TextRequest):
     """
     result = text_processor.process_text(request.text)
     return result
-
-# 라우터 등록
-app.include_router(rasa_endpoint.router, prefix="/rasa", tags=["Chatbot"])
-
-@app.get("/rasa")
-def root():
-    return {"message": "Hello from FastAPI + Rasa!"}
-
-
 
 # FastAPI 실행 (uvicorn 사용)
 if __name__ == "__main__":
