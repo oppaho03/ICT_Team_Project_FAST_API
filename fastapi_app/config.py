@@ -1,0 +1,1 @@
+ORACLE_DSN = "localhost:1521/XEPDB1"
