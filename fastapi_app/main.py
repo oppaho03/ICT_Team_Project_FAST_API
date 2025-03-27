@@ -20,6 +20,10 @@ def process_text(request: TextRequest):
     result = text_processor.process_text(request.text)
     return result
 
+@app.get("/test")
+def test_api():
+    return {"message":"정상 작동중입니다 ! ! ! !"}
+
 # FastAPI 실행 (uvicorn 사용)
 if __name__ == "__main__":
     import uvicorn

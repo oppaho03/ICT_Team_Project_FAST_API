@@ -1,6 +1,6 @@
 import oracledb
-import json
 from config import ORACLE_DSN
+import json
 
 def get_db_connection():
     return oracledb.connect(ORACLE_DSN)
