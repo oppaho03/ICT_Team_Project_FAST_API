@@ -1,0 +1,111 @@
+# FastAPI + Rasa Chatbot Project
+
+## 🗂️ 프로젝트 구조
+```
+project_root/
+├── fastapi_app/          # FastAPI 백엔드
+│   ├── main.py
+│   ├── routers/
+│   ├── services/
+│   └── ...
+├── rasa_chatbot/         # Rasa 챗봇 디렉토리
+├── requirements.txt
+├── requirements_rasa.txt
+└── README.md
+```
+
+---
+
+## 💻 환경 설정
+
+### ✅ Rasa (Python 3.8.20, Conda 가상환경)
+```bash
+conda create -n rasa python=3.8.20
+conda activate rasa
+pip install -r requirements_rasa.txt
+```
+
+### ✅ FastAPI (Python 3.12.3, venv 가상환경)
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows: venv\\Scripts\\activate
+pip install -r requirements.txt
+```
+
+---
+
+## 🚀 실행 방법
+
+### ▶ FastAPI 실행
+
+- **최상위 디렉토리 기준**
+```bash
+uvicorn fastapi_app.main:app --host 192.168.0.65 --port 8001 --reload
+```
+
+- **`fastapi_app/` 디렉토리 내부에서 실행할 경우**
+```bash
+uvicorn main:app --host 192.168.0.65 --port 8001 --reload
+```
+
+### ▶ Rasa 실행
+```bash
+cd rasa_chatbot
+rasa shell
+```
+
+---
+
+## 🧠 주요 기능
+- 🤖 Rasa 챗봇 연동 (추가적으로 api사용법 확인중에 있음)
+- 🗂️ 키워드 분류 (`konlpy`, 사용자 정의 서비스)
+- 🌐 번역 기능 (`DeepL` API 사용)
+- 📝 한글 맞춤법 검사 (`hangul.utils` 등)
+- 😊 감성 분석 (AI Hub 모델 기반)
+
+---
+
+## 📫 주요 API 예시
+
+### 🔹 키워드 분류
+```
+POST /keyword_parser
+{
+  "text": "건강 검진 예약을 하고 싶어요."
+}
+```
+
+### 🔹 감성 분석 (미 완성)
+```
+POST /sentiment
+{
+  "text": "오늘은 기분이 너무 좋아요!"
+}
+```
+
+### 🔹 Rasa 연동
+```
+POST /chat
+{
+  "message": "회원가입 방법 알려줘"
+}
+```
+
+---
+
+## 🔐 .env 예시
+```env
+RASA_API_URL=http://localhost:5005/webhooks/rest/webhook
+DEEPL_API_KEY=your_deepl_api_key
+SENTIMENT_API_KEY=your_sentiment_api_key
+```
+
+---
+
+## 📌 참고 사항
+- 프론트엔드와는 RESTful API 연동
+- FastAPI는 비동기 처리 기반
+
+
+---
+
