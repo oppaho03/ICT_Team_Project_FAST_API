@@ -1,8 +1,14 @@
 import re
-from services.translation_services import translate_text
-from services.keywords_services import text_to_keyword
-from services.hangul_service import hangul_text
-from services.db_service import save_text_processing_result
+from translation_services import translate_text
+from keywords_services import text_to_keyword
+from hangul_service import hangul_text
+from db_service import save_text_processing_result
+import logging
+
+logger = logging.getLogger(__name__)
+SECRET_KEY = "your_secret_key"  # Django와 동일한 키로 설정
+ALGORITHM = "HS256"
+
 
 class TextProcessingService:
     def __init__(self):
@@ -30,15 +36,15 @@ class TextProcessingService:
         2. 번역 후 한글이 많으면 그대로 사용, 영어가 많으면 한글 자판 변환
         3. 한글 자모 조합 (ㅇㅏㄴㄴㅕㅇ → 안녕)
         4. 키워드 추출 (2글자 이상, 의미 없는 단어 제거)
-        5. 데이터 저장
+        5. 데이터 저장 (예외 처리 포함)
         """
 
         text = text.strip()  # 앞뒤 공백 제거
 
-        # **🔹 1) 번역 먼저 수행**
+        # 🔹 1) 번역 먼저 수행
         translated_text = self.translation_service.translate_to_ko(text)
 
-        # **🔹 2) 번역된 문장에서 한글 vs 영어 개수 비교**
+        # 🔹 2) 번역된 문장에서 한글 vs 영어 개수 비교
         korean_count = self.count_korean_chars(translated_text)
         english_count = self.count_english_chars(translated_text)
 
@@ -47,18 +53,26 @@ class TextProcessingService:
         else:
             processed_text = self.hangul_service.ko_to_eng_keyboard(text)  # 한글 자판 변환
 
-        # **🔹 3) 한글 자모 조합 (조합되지 않은 문자 처리)**
+        # 🔹 3) 한글 자모 조합 (조합되지 않은 문자 처리)
         processed_text = self.hangul_service.join_hangul(processed_text)
 
-        # **🔹 4) 키워드 추출 (불필요한 단어 제거)**
+        # 🔹 4) 키워드 추출 (불필요한 단어 제거)
         keywords = self.keyword_service.extract_nouns(processed_text)
-        keywords = list(set(filter(lambda x: len(x) >= 1, keywords)))  # 2글자 이상 단어만 유지
+        keywords = list(set(filter(lambda x: len(x) >= 1, keywords)))  # 1글자 이상 단어만 유지
 
-        # **🔹 5) 키워드가 없으면 공백 제거 및 다시 한글 조합**
+        # 🔹 5) 키워드가 없으면 공백 제거 및 다시 한글 조합
         if not keywords:
             processed_text = self.clean_text(processed_text)
 
-        # **🔹 6) 결과 저장**
-        save_text_processing_result(text, processed_text, keywords)
+        # 🔹 6) 결과 저장 (예외 처리 추가)
+        try:
+            save_text_processing_result(text, processed_text, keywords)
+        except Exception as e:
+            logger.warning(f"[DB 저장 오류] {e}")
+            print(f"[DB 저장 오류] {e}")
 
-        return {"original_text": text, "processed_text": processed_text, "keywords": keywords}
+        return {
+            "original_text": text,
+            "processed_text": processed_text,
+            "keywords": keywords
+        }
