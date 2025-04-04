@@ -2,6 +2,9 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, File, UploadFile
+
+from fastapi_app.services import openai_service
+from fastapi_app.services.openai_service import OpenAIService
 # from services.auth_service import AuthService
 from services.ocr_service import OCRService
 from services.text_processing_service import TextProcessingService
@@ -15,6 +18,7 @@ app = FastAPI()
 # 서비스 인스턴스 생성
 # auth_service = AuthService()
 ocr_service = OCRService()
+openai_service = OpenAIService()
 text_processor = TextProcessingService()
 
 # CORS 설정
@@ -35,7 +39,18 @@ async def ocr_test(file: UploadFile = File(...)):
         "filesize": len(contents)
     }
 
+@app.post("/ocr_analyze")
+async def ocr_and_analyze(file: UploadFile = File(...)):
+    image_bytes = await file.read()
+    ocr_result = ocr_service.run_ocr_from_bytes(image_bytes)
 
+    ocr_text = "\n".join(ocr_result)
+    openai_response = openai_service.ask_about_prescription(ocr_text)
+
+    return {
+        "ocr_raw": ocr_text,
+        "gpt_analysis": openai_response
+    }
 
 # 텍스트 처리용 모델
 class TextRequest(BaseModel):
