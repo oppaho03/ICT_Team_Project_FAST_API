@@ -1,4 +1,4 @@
-from services.text_processing_service import TextProcessingService
+from text_processing_service import TextProcessingService
 
 # ✅ 텍스트 처리 서비스 인스턴스 생성
 text_processor = TextProcessingService()
