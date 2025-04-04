@@ -1,8 +1,8 @@
 import re
-from translation_services import translate_text
-from keywords_services import text_to_keyword
-from hangul_service import hangul_text
-from db_service import save_text_processing_result
+from .translation_services import translate_text
+from .keywords_services import text_to_keyword
+from .hangul_service import hangul_text
+from .db_service import save_text_processing_result
 import logging
 
 logger = logging.getLogger(__name__)
