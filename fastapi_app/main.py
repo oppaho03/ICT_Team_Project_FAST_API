@@ -1,7 +1,9 @@
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi_app.router.api_router import router as api_router  # ✅ 통합 라우터
+
+from fastapi_app.router import ocr_router
+from fastapi_app.router.api_router import router as api_router
 
 # .env 로딩
 load_dotenv()
@@ -9,6 +11,7 @@ load_dotenv()
 # FastAPI 앱 생성
 app = FastAPI()
 
+app.include_router(ocr_router.router)
 # 라우터 등록
 app.include_router(api_router)
 
