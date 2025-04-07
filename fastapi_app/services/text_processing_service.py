@@ -6,11 +6,11 @@ from .keywords_services import text_to_keyword
 from .hangul_service import hangul_text
 import logging
 
-# .env 파일 로드 (위치가 루트일 경우 경로 지정)
+# .env 파일 로드
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '.env'))
 
 logger = logging.getLogger(__name__)
-SECRET_KEY = os.getenv("SECRET_KEY") #DRF와 동일하게
+SECRET_KEY = os.getenv("SECRET_KEY")  # DRF와 동일하게
 ALGORITHM = "HS256"
 
 
@@ -45,30 +45,33 @@ class TextProcessingService:
 
         text = text.strip()  # 앞뒤 공백 제거
 
-        # 🔹 1) 번역 먼저 수행
-        translated_text = self.translation_service.translate_to_ko(text)
-
-        # 🔹 2) 번역된 문장에서 한글 vs 영어 개수 비교
-        korean_count = self.count_korean_chars(translated_text)
-        english_count = self.count_english_chars(translated_text)
-
-        if korean_count >= english_count:
-            processed_text = translated_text  # 번역된 문장 사용
+        # ✅ 이미 한글로 이루어진 완성된 문장일 경우 그대로 사용
+        if self.count_korean_chars(text) > 5 and self.count_english_chars(text) == 0:
+            processed_text = text
         else:
-            processed_text = self.hangul_service.ko_to_eng_keyboard(text)  # 한글 자판 변환
+            # 🔹 1) 번역 먼저 수행
+            translated_text = self.translation_service.translate_to_ko(text)
 
-        # 🔹 3) 한글 자모 조합 (조합되지 않은 문자 처리)
-        processed_text = self.hangul_service.join_hangul(processed_text)
+            # 🔹 2) 번역된 문장에서 한글 vs 영어 개수 비교
+            korean_count = self.count_korean_chars(translated_text)
+            english_count = self.count_english_chars(translated_text)
+
+            if korean_count >= english_count:
+                processed_text = translated_text
+            else:
+                processed_text = self.hangul_service.ko_to_eng_keyboard(text)
+
+            # 🔹 3) 한글 자모 조합
+            processed_text = self.hangul_service.join_hangul(processed_text)
 
         # 🔹 4) 키워드 추출 (불필요한 단어 제거)
         keywords = self.keyword_service.extract_nouns(processed_text)
-        keywords = list(set(filter(lambda x: len(x) >= 1, keywords)))  # 1글자 이상 단어만 유지
+        keywords = list(set(filter(lambda x: len(x) >= 1, keywords)))
 
-        # 🔹 5) 키워드가 없으면 공백 제거 및 다시 한글 조합
+        # 🔹 5) 키워드 없을 경우 정제 텍스트 재처리
         if not keywords:
             processed_text = self.clean_text(processed_text)
 
-        # ✅ 저장은 하지 않고 결과만 반환
         return {
             "original_text": text,
             "processed_text": processed_text,
