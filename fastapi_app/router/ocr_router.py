@@ -17,7 +17,7 @@ async def ocr_test(file: UploadFile = File(...)):
 @router.post("/analyze")
 async def ocr_and_analyze(file: UploadFile = File(...)):
     image_bytes = await file.read()
-    ocr_result = ocr_service.run_ocr_from_bytes(image_bytes)
+    ocr_result = ocr_service.run_ocr(image_bytes)
     ocr_text = "\n".join(ocr_result)
     gpt_response = openai_service.ask_about_prescription(ocr_text)
     return {

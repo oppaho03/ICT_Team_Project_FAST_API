@@ -1,5 +1,3 @@
-# services/ocr_service.py
-
 import easyocr
 import numpy as np
 import cv2

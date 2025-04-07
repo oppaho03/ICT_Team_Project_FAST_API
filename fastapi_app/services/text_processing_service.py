@@ -1,12 +1,16 @@
+import os
 import re
+from dotenv import load_dotenv
 from .translation_services import translate_text
 from .keywords_services import text_to_keyword
 from .hangul_service import hangul_text
-from .db_service import save_text_processing_result
 import logging
 
+# .env 파일 로드 (위치가 루트일 경우 경로 지정)
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '.env'))
+
 logger = logging.getLogger(__name__)
-SECRET_KEY = "your_secret_key"  # Django와 동일한 키로 설정
+SECRET_KEY = os.getenv("SECRET_KEY") #DRF와 동일하게
 ALGORITHM = "HS256"
 
 
@@ -36,7 +40,7 @@ class TextProcessingService:
         2. 번역 후 한글이 많으면 그대로 사용, 영어가 많으면 한글 자판 변환
         3. 한글 자모 조합 (ㅇㅏㄴㄴㅕㅇ → 안녕)
         4. 키워드 추출 (2글자 이상, 의미 없는 단어 제거)
-        5. 데이터 저장 (예외 처리 포함)
+        5. 키워드 없을 경우 재조합
         """
 
         text = text.strip()  # 앞뒤 공백 제거
@@ -64,13 +68,7 @@ class TextProcessingService:
         if not keywords:
             processed_text = self.clean_text(processed_text)
 
-        # 🔹 6) 결과 저장 (예외 처리 추가)
-        try:
-            save_text_processing_result(text, processed_text, keywords)
-        except Exception as e:
-            logger.warning(f"[DB 저장 오류] {e}")
-            print(f"[DB 저장 오류] {e}")
-
+        # ✅ 저장은 하지 않고 결과만 반환
         return {
             "original_text": text,
             "processed_text": processed_text,
