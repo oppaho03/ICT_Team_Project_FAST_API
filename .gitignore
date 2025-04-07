@@ -4,3 +4,4 @@ my_venv
 .idea/
 __pycache__/
 *.pyc
+audio_data
